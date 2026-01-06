@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Algorithms for Optimization"
-date: 2025-05-25 10:00:00 -0500
+date: 2026-01-05 10:00:00 -0500
 categories: [your, categories]
 tags: [algorithms, optimization]
 ---
