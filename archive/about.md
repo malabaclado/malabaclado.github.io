@@ -1,7 +1,8 @@
 ---
-# the default layout is 'page'
-icon: fas fa-info-circle
-order: 4
+layout: page
+title: About
+# This makes it the landing page
+premalink: /
 ---
 
 ### 👋Hi, nice to meet you! I'm Mark
