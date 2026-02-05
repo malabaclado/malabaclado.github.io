@@ -2,7 +2,6 @@
 layout: page
 title: About
 # This makes it the landing page
-premalink: /
 ---
 
 ### 👋Hi, nice to meet you! I'm Mark
