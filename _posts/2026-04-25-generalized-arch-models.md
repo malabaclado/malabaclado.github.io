@@ -1,18 +1,27 @@
 ---
 layout: post
 title: "Generalized ARCH models"
-categories: 
+categories: [Blog]
 tags: [time series analysis]
 math: true
 ---
 
-The GARCH(1,1) Model
+**GARCH**, which stands for Generalized Autoregressive Conditional Heteroskedasticity, is a statistical model used to estimate and forecast the volatility of time series data. While standard financial models often assume that the "spread" or variance of returns is constant over time, GARCH recognizes that volatility changes and often "clusters" together.
+
+## Core Concepts
+
+To understand GARCH, it helps to break down the technical terms:
+
+- **Autoregressive**: The current value is dependent on its own previous values.
+- **Conditional**: The variance depends on the recent past.
+- **Heteroskedasticity**: A fancy way of saying "changing variance" or "varying volatility."
+
+## The GARCH(1,1) Model
 
 The most common version is the $GARCH(1,1)$ model. It predicts the current variance ($\sigma_t^2$) using three main components:
 
 $$\sigma_t^2 = \omega + \alpha \epsilon_{t-1}^2 + \beta \sigma_{t-1}^2$$
 
-  
 
 Where:
 

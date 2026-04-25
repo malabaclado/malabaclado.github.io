@@ -7,7 +7,7 @@ tags: [api, finance, python, FastAPI, time series analysis]
 math: true
 ---
 
-In this project, I created a program that pulls historical stock prices data from Twelve Data API, stores it in an SQLite database, and trains a ARCH model to predict volatility. The program is deployed as a RESTful API via FastAPI.
+In this project, I created a Python program that pulls historical stock prices data from Twelve Data API, stores it in a SQLite database, and trains a GARCH model to predict volatility. The program is deployed as a RESTful API via FastAPI.
 
 
 > You can find the source code and documentation for this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
@@ -22,11 +22,11 @@ Technologies used:
 - Backend: FastAPI/Python
 - Data Source: Twelve Data API
 - Database: SQLite
-- Model: ARCH
+- Model: GARCH
 - Concepts: Time-series analysis, RESTful API design, CRUD operations.
 
 
-In finance, volatility is a statistical measure of the dispersion of returns for a given security or market index. It represents the degree to which an asset's price fluctuates over time. Mathematically, it is most often expressed as the standard deviation ($\sigma$) of logarithmic returns, calculated as:
+In finance, **volatility** is a statistical measure of the dispersion of returns for a given security or market index. It represents the degree to which an asset's price fluctuates over time. Mathematically, it is most often expressed as the standard deviation ($\sigma$) of logarithmic returns, calculated as:
 
 $$\sigma = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N} (R_i - \bar{R})^2}$$
 
@@ -44,7 +44,7 @@ While often viewed negatively as "risk," volatility is a multi-faceted tool for 
 - **Market Sentimen**t: Broad volatility indices, such as the VIX (CBOE Volatility Index), reflect the market's expectation of near-term price changes. High levels often signal "fear" or panic, while low levels suggest "greed" or complacency.
 - **Price Discovery and Opportunity**: For active investors, volatility provides the price movement necessary to find entry and exit points. Without price fluctuations, there would be no opportunity to buy undervalued assets or sell overvalued ones.
 
-### Time series methods for predicting volatility
+### Time series methods for predicting volatility - GARCH models
 
 **GARCH**, which stands for Generalized Autoregressive Conditional Heteroskedasticity, is a statistical model used to estimate and forecast the volatility of time series data. While standard financial models often assume that the "spread" or variance of returns is constant over time, GARCH recognizes that volatility changes and often "clusters" together.
 
@@ -62,23 +62,55 @@ This project uses **GARCH(p,q)** models where p and q are parameters defined in 
 
 
 
-## Program Structure
+## Project Structure
+
+The project is separated into three layers: the main program, the data layer, and the model layer. The `/data` folder contains the SQLite files while the `/models` folder contains the saved GARCH models as `.pkl` files.
 
 ```
  predicting-stock-volatility/
- ├── data/                   # Directory for stocks.sqlite
- ├── models/                 # Saved .pkl files
- ├── main.py                 # main program
- ├── data.py                 # data layer
- ├── models.py               # model layer
- └── Dockerfile              # Renamed from dockerfile.txt
+ ├── data/                       # Directory for stocks.sqlite
+ ├── models/                     # Saved .pkl files
+ ├── main.py                     # main program
+ ├── data.py                     # data layer
+    └── TwelveDataAPI class
+        └── get_daily()
+    └── SQLRepository class
+        ├── insert_table()
+        └── read_table()
+ ├── models.py                   # model layer
+    └── GarchModel class
+        ├── wrangle_data()
+        ├── fit()
+        ├── predict_volatility()
+        ├── dump()
+        └── load()
+ └── Dockerfile                  # Renamed from dockerfile.txt
 ```
+
+<!-- 
+### The data layer (data.py)
+
+This layer isolates all data ingestion and persistence logic from the core business logic. By modularizing the data layer, the application is highly maintainable.
+
+- The `TwelveDataAPI` class handles external HTTP requests, data wrangling, and converting raw JSON into clean Pandas dataframes.
+- The `SQLReporitory` class handles CRUD operations with the SQLite database, acting as local cache to bypass API rate limits and speed up model training. 
+
+### The model layer (model.py)
+
+The primary purpose of this layer is to encapsulate the entire lifecycle of the statistical model. 
+
+### The main program (main.py) 
+
+-->
 
 ## Installation & Demo
 
-1. Install docker
+1. Install Docker
 2. Clone the repo from Github.
 3. Run `docker compose up`
+
+> Please see detailed instructions on how to run this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
+{: .prompt-info }
 
 ## API Guide
 ### `POST /fit`
