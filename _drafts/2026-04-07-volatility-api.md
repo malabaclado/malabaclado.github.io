@@ -6,7 +6,15 @@ categories: [Projects]
 tags: [api, finance, python, draft]
 ---
 
+
+
 The Volatility API provides real-time and historical volatility data for various financial assets. Built with a focus on performance and accuracy, it allows developers to integrate advanced risk metrics into their financial applications.
+
+
+
+> You can find the source code and documentation for this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
+{: .prompt-info }
+
 
 ## Key Features
 - **Real-time Data:** Get up-to-the-minute volatility calculations.
@@ -21,3 +29,7 @@ curl -X GET "https://api.example.com/volatility?symbol=AAPL"
 ```
 
 Stay tuned for more updates and detailed documentation!
+
+
+---
+This is an update!
