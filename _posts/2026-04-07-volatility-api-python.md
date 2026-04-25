@@ -2,7 +2,7 @@
 layout: post
 title: "Volatility Forecasting API: Historical Stock Volatility Forecasting with GARCH and FastAPI"
 date: 2026-04-06 10:00:00 -0500
-categories: [Projects]
+categories: [Projects, Python]
 tags: [api, finance, python, FastAPI, time series analysis]
 math: true
 ---
