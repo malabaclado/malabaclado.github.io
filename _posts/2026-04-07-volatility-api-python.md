@@ -2,7 +2,7 @@
 layout: post
 title: "Volatility Forecasting API: Historical Stock Volatility Forecasting with GARCH and FastAPI"
 date: 2026-04-06 10:00:00 -0500
-categories: [Projects, Python]
+categories: [Projects]
 tags: [api, finance, python, FastAPI, time series analysis]
 math: true
 ---
@@ -15,9 +15,6 @@ In this project, I created a Python program that pulls historical stock prices d
 
 ## Project Overview
 
-<!-- What is volatility and why is it important? -->
-<!-- What is ARCH and how does it predict volatility? -->
-
 Technologies used:
 - Backend: FastAPI/Python
 - Data Source: Twelve Data API
@@ -25,6 +22,7 @@ Technologies used:
 - Model: GARCH
 - Concepts: Time-series analysis, RESTful API design, CRUD operations.
 
+<!-- What is volatility and why is it important? -->
 
 In finance, **volatility** is a statistical measure of the dispersion of returns for a given security or market index. It represents the degree to which an asset's price fluctuates over time. Mathematically, it is most often expressed as the standard deviation ($\sigma$) of logarithmic returns, calculated as:
 
@@ -43,6 +41,8 @@ While often viewed negatively as "risk," volatility is a multi-faceted tool for 
 - **Portfolio Diversification**: By understanding the volatility of different assets, investors can combine them to reduce the overall "bumpiness" of their portfolio. Assets that aren't volatile in the same way (low correlation) help stabilize long-term returns.
 - **Market Sentimen**t: Broad volatility indices, such as the VIX (CBOE Volatility Index), reflect the market's expectation of near-term price changes. High levels often signal "fear" or panic, while low levels suggest "greed" or complacency.
 - **Price Discovery and Opportunity**: For active investors, volatility provides the price movement necessary to find entry and exit points. Without price fluctuations, there would be no opportunity to buy undervalued assets or sell overvalued ones.
+
+<!-- What is ARCH and how does it predict volatility? -->
 
 ### Time series methods for predicting volatility - GARCH models
 
