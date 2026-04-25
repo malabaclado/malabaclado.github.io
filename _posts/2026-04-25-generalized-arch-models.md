@@ -35,7 +35,7 @@ Where:
 
   
 
-### The GARCH(p,q) model
+## The GARCH(p,q) model
 
   
 
@@ -47,7 +47,7 @@ The model consists of two main equations: the **Mean Equation** and the **Varian
 
   
 
-#### 1. The Mean Equation
+### 1. The Mean Equation
 
 The mean equation describes the observed return ($Y_t$) at time $t$ as a function of other variables plus an error term (innovation).
 
@@ -71,7 +71,7 @@ Where:
 
   
 
-#### 2. The Variance Equation (GARCH(p, q))
+### 2. The Variance Equation (GARCH(p, q))
 
 The variance equation defines the conditional variance ($\sigma_t^2$) based on $q$ lags of the squared residuals (the **ARCH** terms) and $p$ lags of the previous variances (the **GARCH** terms).
 
@@ -99,7 +99,7 @@ $$\sigma_t^2 = \omega + \sum_{i=1}^{q} \alpha_i \epsilon_{t-i}^2 + \sum_{j=1}^{p
 
   
 
-#### 3. Necessary Constraints
+### 3. Necessary Constraints
 
 For the GARCH(p, q) model to be statistically valid and stable (stationary), the following conditions must be met:
 
@@ -125,7 +125,7 @@ For the GARCH(p, q) model to be statistically valid and stable (stationary), the
 
   
 
-#### Summary of Notation
+### Summary of Notation
 
 * **$q$ (ARCH order):** The number of autoregressive squared residual terms.
 
