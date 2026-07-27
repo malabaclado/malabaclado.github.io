@@ -87,22 +87,136 @@ The project is separated into three layers: the main program, the data layer, an
  └── Dockerfile                  # Renamed from dockerfile.txt
 ```
 
-<!-- 
-### The data layer (data.py)
+<!---
 
-This layer isolates all data ingestion and persistence logic from the core business logic. By modularizing the data layer, the application is highly maintainable.
+> The following sections will discuss the inner workings of the program. Skip over to **Installation and Demo** section for setting up the program.
+{: .prompt-info }
 
-- The `TwelveDataAPI` class handles external HTTP requests, data wrangling, and converting raw JSON into clean Pandas dataframes.
-- The `SQLReporitory` class handles CRUD operations with the SQLite database, acting as local cache to bypass API rate limits and speed up model training. 
+### The data layer
 
-### The model layer (model.py)
+The data layer (`data.py`) isolates all data ingestion and persistence logic from the core business logic. By modularizing the data layer, the application is highly maintainable. It consists of two object classes: `TwelveDataAPI` and `SQLRepository`.
 
-The primary purpose of this layer is to encapsulate the entire lifecycle of the statistical model. 
+#### The TwelveDataAPI class
 
-### The main program (main.py) 
+The `TwelveDataAPI` class handles external HTTP requests, data wrangling, and converting raw JSON into clean Pandas dataframes.
 
--->
 
+##### get_daily() function
+
+The `get_daily()` function sends a `get` request to Twelve Data API, converts the `.json` response to a DataFrame, formats it, and returns the DataFrame. The function takes a ticker and the number of days. 
+
+```python
+def get_daily(self, ticker, output_size=90, interval="1day"):
+    
+        """Get daily time series of an equity from Twelve Data API.
+
+        Parameters
+        ----------
+        ticker : str
+            The ticker symbol of the equity.
+        output_size : int, optional
+            Number of observations to retrieve. "compact" returns the
+            latest 100 observations. "full" returns all observations for
+            equity. By default "full".
+        interval : str, optional
+            Time interval between observations. By default "1day".
+
+        Returns
+        -------
+        pd.DataFrame
+            Columns are 'open', 'high', 'low', 'close', and 'volume'.
+            All columns are numeric.
+        """
+        url = (
+            "https://api.twelvedata.com/time_series?"
+            f"symbol={ticker}&"
+            f"interval={interval}&"
+            f"outputsize={output_size}&"
+            f"apikey={self.__api_key}"
+        )
+
+        # Send request to API
+        response = requests.get(url)
+        response_data = response.json() #returns a json with two keys: meta and values
+
+        # Error handling: if API call was unsuccessful, raise exception with error message
+        if "meta" not in response_data.keys():
+            error_msg = response_data['message']
+            raise Exception(
+                f"Invalid API call. Error message: {error_msg}"
+            )
+
+        # Convert API response to DataFrame
+        df = pd.DataFrame(response_data['values'])
+
+        # Set 'datetime' column as index
+        df.set_index('datetime', inplace=True)
+        df.index = pd.to_datetime(df.index)
+        df.index.name = "date"
+
+        # Convert 'open', 'high', 'low', 'close' to float 
+        df[['open', 'high', 'low', 'close']] = df[['open', 'high', 'low', 'close']].astype(float) 
+
+        # Convert 'volume' to integer
+        df['volume'] = df['volume'].astype(int) 
+
+        # Return results
+        return df
+```
+
+
+#### The SQLRepository class
+The `SQLReporitory` class handles CRUD operations with the SQLite database, acting as local cache to bypass API rate limits and speed up model training. 
+
+
+#####  `insert_table()` function
+The `insert_table` function writes the data into the SQLite database.
+
+```py
+def insert_table(self, table_name, records, if_exists="replace"):
+    
+        """Insert DataFrame into SQLite database as table
+
+        Parameters
+        ----------
+        table_name : str
+        records : pd.DataFrame
+        if_exists : str, optional
+            How to behave if the table already exists.
+
+            - 'fail': Raise a ValueError.
+            - 'replace': Drop the table before inserting new values.
+            - 'append': Insert new values to the existing table.
+
+            Dafault: 'fail'
+
+        Returns
+        -------
+        dict
+            Dictionary has two keys:
+
+            - 'transaction_successful', followed by bool
+            - 'records_inserted', followed by int
+        """
+        
+        n_inserted = records.to_sql(name=table_name, con=self.connection, if_exists=if_exists)
+        
+        return {
+            'transaction_successful':True, 'records_inserted':n_inserted
+        }
+```
+
+
+
+### The model layer
+
+The primary purpose of the model layer (`model.py`) is to encapsulate the entire lifecycle of the statistical model. It consists of the `GarchModel` object class.
+
+### The main program
+
+The `main.py` runs the application and uses FastAPI to deploy the model. It uses the previously mentioned object classes from `data.py` and `model.py`.
+
+--->
 ## Installation & Demo
 
 1. Install Docker
