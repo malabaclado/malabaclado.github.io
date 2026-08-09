@@ -9,3 +9,8 @@ tags:
 ---
 
 Page under construction.
+
+Other titles:
+- How I Replaced Cluttered Email Alerts with Real-Time Teams Notifications
+- How to Automate Issue Tracker Email Alerts to Microsoft Teams
+
