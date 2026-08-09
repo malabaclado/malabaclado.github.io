@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How I used Power Automate to streamline our team's notification system and improve acknowledgement rate by 50%
+title: How I automated our Issue Tracker Email alerts into real-time Teams notifications using Power Automate.
 categories:
   - Blog
 tags:
@@ -8,9 +8,19 @@ tags:
   - draft
 ---
 
-Page under construction.
+# Intro/Summary
+At my work, we have two issue tracker channels, both of which sends an email notification. When I entered the team, we manually monitor issues via mail. I automated these emails into a single Teams channel to deliver simplified updates improving efficiency and visibility.
 
-Other titles:
-- How I Replaced Cluttered Email Alerts with Real-Time Teams Notifications
-- How to Automate Issue Tracker Email Alerts to Microsoft Teams
+# The problem
+A sample email would look like this:
+
+
+
+# The solution & architecture
+Here's what the simplified notification looks like
+
+## Special handling for NEW tickets
+# Step-by-step implementation
+# The results and business impact
+# Key takeaways
 
