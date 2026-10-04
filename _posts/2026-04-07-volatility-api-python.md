@@ -61,7 +61,7 @@ This project uses **GARCH(p,q)** models where p and q are parameters defined in 
 -->
 ### High-Level Project Overview
 
-The project follows a modular, layered architecture with a clear separation of concerns across configuration, data access, domain modeling, numerical computation, schema validation, and presentation (HTTP API).
+The project follows a modular, layered architecture with a clear separation of concerns across configuration, data access, GARCH modeling, numerical computation, schema validation, and presentation (HTTP API).
 
 ```
                                   ┌────────────────────────┐
@@ -77,7 +77,7 @@ The project follows a modular, layered architecture with a clear separation of c
          │                            │                               │
          ▼                            ▼                               ▼
 ┌─────────────────────────┐  ┌─────────────────────────┐  ┌─────────────────────────┐
-│ 2. Schema Validation    │  │ 3. Domain Model Layer   │  │ 4. Mathematical Engine  │
+│ 2. Schema Validation    │  │ 3. Model Layer   │  │ 4. Mathematical Engine  │
 │    (`src/schemas.py`)   │  │    (`src/model.py`)     │  │    (`src/math_helper.py`)│
 │ • Pydantic V2 Models    │  │ • GarchModel lifecycle  │  │ • Student-t quantiles   │
 │ • Enums & Bounds        │  │ • arch_model calibration│  │ • Expected Shortfall(ES)│
@@ -126,7 +126,7 @@ predicting-stock-volatility-using-Python/
 │   │   └── advance_business_days()           # Forward calendar date projection (skips weekends)
 │   │
 │   └── model.py                  # Econometric modeling & model registry operations
-│       ├── GarchModel            # Core domain model managing calibration, forecast, and persistence
+│       ├── GarchModel            # Core GARCH model managing calibration, forecast, and persistence
 │       │   ├── get_daily_returns()           # Double-ended cache validation, API fallback & log returns
 │       │   ├── fit()                         # Calibrates zero-mean GARCH(p, q) process via arch library
 │       │   ├── predict_volatility()          # Generates multi-horizon conditional variance predictions
@@ -306,9 +306,9 @@ Generates next-day and multi-horizon volatility predictions, alongside parametri
 ## Limitations
 - Models assume zero-mean.
 - Only supports GARCH models.
-- Error distribution is only normal and student’s t distribution
+- Available error distributions are normal and student’s t distribution only.
 - Value-at-Risk calculation method is parametric only.
 
 ## Future Enhancements
-* Integrate a frontend dashboard using Streamlit or Dash.
-* Include support for other ARCH model types, error distribution, and value-at-risk calculation methods.
+- Include support for other ARCH model types, error distribution, and value-at-risk calculation methods.
+- **TwelveData API Limitations**: The free-tier of TwelveData API allows up to 8 calls per minute and are limited to a few selection of stocks.   
