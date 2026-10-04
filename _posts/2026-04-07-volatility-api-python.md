@@ -217,37 +217,10 @@ The primary purpose of the model layer (`model.py`) is to encapsulate the entire
 The `main.py` runs the application and uses FastAPI to deploy the model. It uses the previously mentioned object classes from `data.py` and `model.py`.
 
 --->
-## Installation & Demo
-
-1. Install Docker
-2. Clone the repo from Github.
-3. Run `docker compose up`
+## Installation & API Guide
 
 > Please see detailed instructions on how to run this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
 {: .prompt-info }
-
-## API Guide
-### `POST /fit`
-
-Description: Trains an GARCH model on historical data and saves it in the `/models` folder.
-
-Parameters:
-- `ticker`: A stock ticker symbol (e.g., "AAPL").
-- `n_observations`: Number of past data points to use for training (integer).
-- `p`, `q`: GARCH model parameters (integers).
-
-Returns: A JSON message with the name of the trained model.
-
-### `POST /predict`
-
-Description: Uses a trained model to predict future volatility.
-
-Parameters:
-- `ticker`: A stock ticker symbol.
-- `n_days`: Number of days to predict ahead (integer).
-- `use_model`: Model to use ("latest" for the most recent model in `/models`).
-
-Returns: Predicted volatility values as JSON.
 
 ## Future Enhancements
 * Integrate a frontend dashboard using Streamlit or Dash.
