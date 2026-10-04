@@ -67,24 +67,85 @@ This project uses **GARCH(p,q)** models where p and q are parameters defined in 
 The project is separated into three layers: the main program, the data layer, and the model layer. The `/data` folder contains the SQLite files while the `/models` folder contains the saved GARCH models as `.pkl` files.
 
 ```
- predicting-stock-volatility/
- ├── data/                       # Directory for stocks.sqlite
- ├── models/                     # Saved .pkl files
- ├── main.py                     # main program
- ├── data.py                     # data layer
-    └── TwelveDataAPI class
-        └── get_daily()
-    └── SQLRepository class
-        ├── insert_table()
-        └── read_table()
- ├── models.py                   # model layer
-    └── GarchModel class
-        ├── wrangle_data()
-        ├── fit()
-        ├── predict_volatility()
-        ├── dump()
-        └── load()
- └── Dockerfile                  # Renamed from dockerfile.txt
+predicting-stock-volatility-using-Python/
+│
+├── config.py                     # Centralized Pydantic Settings & environment variable configuration
+├── main.py                       # FastAPI entrypoint, routes, diagnostics, and structured logging
+│
+├── src/                          # Core application engine
+│   ├── data.py                   # Market data acquisition & SQLite caching layer
+│   │   ├── TwelveDataAPI         # REST client for external market data extraction
+│   │   │   └── fetch_data_from_api()         # Retrieves historical daily OHLCV prices
+│   │   ├── SQLRepository         # SQLite persistence and query abstraction
+│   │   │   ├── insert_table()                # Writes/updates time-series records in SQLite
+│   │   │   └── read_table()                  # Reads filtered historical prices by date range
+│   │   ├── get_latest_expected_eod()         # Market-close & exchange timezone-aware date resolver
+│   │   └── get_start_date()                  # Computes lookback window start dates (1y, 3y, 5y)
+│   │
+│   ├── math_helper.py            # Quantitative analysis & analytical tail-risk engine
+│   │   ├── compute_distribution_quantiles()  # VaR & closed-form ES factors (Normal & Student's t)
+│   │   ├── calculate_risk_metrics_for_horizon() # Horizon-level VaR and Expected Shortfall calculations
+│   │   ├── get_volatility_summary()          # 1-day conditional vol, annualized vol, and trend classification
+│   │   ├── get_horizon_forecasts()           # Multi-period variance aggregation term structure
+│   │   └── advance_business_days()           # Forward calendar date projection (skips weekends)
+│   │
+│   └── model.py                  # Econometric modeling & model registry operations
+│       ├── GarchModel            # Core domain model managing calibration, forecast, and persistence
+│       │   ├── get_daily_returns()           # Double-ended cache validation, API fallback & log returns
+│       │   ├── fit()                         # Calibrates zero-mean GARCH(p, q) process via arch library
+│       │   ├── predict_volatility()          # Generates multi-horizon conditional variance predictions
+│       │   ├── dump()                        # Serializes trained model artifact to timestamped .pkl
+│       │   └── load()                        # Deserializes model artifact by name or 'latest'
+│       ├── build_model()         # Factory function initializing GarchModel with SQL repository
+│       ├── filter_saved_models() # Queries & filters model registry by performance benchmarks
+│       ├── read_models_table()   # Reads cataloged model records from SQLite
+│       └── save_model_to_db()    # Records model hyperparameters, AIC/BIC, and persistence in SQLite
+│
+├── market_data.sqlite            # Local SQLite database caching historical equity price time series
+├── models.sqlite                 # SQLite database cataloging fitted model metadata & audit history
+└── models/                       # Directory storing serialized GARCH model artifacts (.pkl files)
+```
+
+
+## High-Level Project Overview
+
+The project follows a modular, layered architecture with a clear separation of concerns across configuration, data access, domain modeling, numerical computation, schema validation, and presentation (HTTP API).
+
+```
+                                  ┌────────────────────────┐
+                                  │   HTTP Request (REST)  │
+                                  └───────────┬────────────┘
+                                              │
+                                              ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. Presentation & Routing Layer (`main.py`)                                            │
+│    • Centralized structured logging (`logging.basicConfig`)                            │
+│    • /diagnostics/check    • /model/search    • /models/fit    • /models/forecast      │
+└────────┬────────────────────────────┬───────────────────────────────┬──────────────────┘
+         │                            │                               │
+         ▼                            ▼                               ▼
+┌─────────────────────────┐  ┌─────────────────────────┐  ┌─────────────────────────┐
+│ 2. Schema Validation    │  │ 3. Domain Model Layer   │  │ 4. Mathematical Engine  │
+│    (`src/schemas.py`)   │  │    (`src/model.py`)     │  │    (`src/math_helper.py`)│
+│ • Pydantic V2 Models    │  │ • GarchModel lifecycle  │  │ • Student-t quantiles   │
+│ • Enums & Bounds        │  │ • arch_model calibration│  │ • Expected Shortfall(ES)│
+│ • Field/Model Validators│  │ • Artifact dump/load    │  │ • Volatility aggregation│
+│ • Ticker Sanitization   │  │ • Model Registry Search │  │ • Regime classification │
+└─────────────────────────┘  └────────────┬────────────┘  └─────────────────────────┘
+                                          │
+                                          ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ 5. Data Access & Ingestion Layer (`src/data.py`, `config.py`)                          │
+│    • TwelveDataAPI: External daily equity data retrieval via REST                      │
+│    • SQLRepository: Generic SQLite CRUD operations                                     │
+│    • Timezone-aware NYSE EOD schedule checks (America/New_York)                        │
+└────────────────────────┬────────────────────────────────┬──────────────────────────────┘
+                         │                                │
+                         ▼                                ▼
+         ┌───────────────────────────────┐ ┌───────────────────────────────┐
+         │ `market_data.sqlite`          │ │ `models.sqlite` & `models/`   │
+         │ (Cached historical OHLCV data)│ │ (Model registry & artifacts)  │
+         └───────────────────────────────┘ └───────────────────────────────┘
 ```
 
 <!---
