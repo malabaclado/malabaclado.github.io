@@ -102,6 +102,8 @@ The project follows a modular, layered architecture with a clear separation of c
 
 ### Layered Project Structure
 
+The project is organized as follows:
+
 ```
 predicting-stock-volatility-using-Python/
 │
@@ -285,14 +287,20 @@ The `main.py` runs the application and uses FastAPI to deploy the model. It uses
 #### 1. `GET /diagnostics/check`
 Tests historical returns for stationarity (ADF test) and conditional heteroskedasticity (Engle's ARCH LM test) to verify if the equity time series is mathematically suitable for GARCH modeling.
 
+![[Pasted image 20261004083438.png]]
+
 #### 2. `POST /model/search`
 Searches and filters saved model artifacts cataloged in the SQLite registry (`models.sqlite`) based on performance metrics, training dates, and convergence.
 
+![[Pasted image 20261004083507.png]]
 #### 3. `POST /models/fit`
 Fits a GARCH(p,q) volatility model on historical daily log returns, dumps the artifact (`.pkl`) to disk, and records its metadata into `models.sqlite`.
 
+![[Pasted image 20261004083525.png]]
 #### 4. `POST /models/forecast`
 Generates next-day and multi-horizon volatility predictions, alongside parametric Value-at-Risk and Expected Shortfall forecasts.
+
+![[Pasted image 20261004083541.png]]
 
 > Please see detailed the API usage guide, query parameters and sample request and response on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
 {: .prompt-info }
