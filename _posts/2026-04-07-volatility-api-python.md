@@ -22,7 +22,7 @@ Technologies used:
 - Model: GARCH
 - Concepts: Time-series analysis, RESTful API design, CRUD operations.
 
-<!-- What is volatility and why is it important? -->
+<!---
 
 In finance, **volatility** is a statistical measure of the dispersion of returns for a given security or market index. It represents the degree to which an asset's price fluctuates over time. Mathematically, it is most often expressed as the standard deviation ($\sigma$) of logarithmic returns, calculated as:
 
@@ -42,13 +42,11 @@ While often viewed negatively as "risk," volatility is a multi-faceted tool for 
 - **Market Sentimen**t: Broad volatility indices, such as the VIX (CBOE Volatility Index), reflect the market's expectation of near-term price changes. High levels often signal "fear" or panic, while low levels suggest "greed" or complacency.
 - **Price Discovery and Opportunity**: For active investors, volatility provides the price movement necessary to find entry and exit points. Without price fluctuations, there would be no opportunity to buy undervalued assets or sell overvalued ones.
 
-<!-- What is ARCH and how does it predict volatility? -->
+
 
 ### Time series methods for predicting volatility - GARCH models
 
 **GARCH**, which stands for Generalized Autoregressive Conditional Heteroskedasticity, is a statistical model used to estimate and forecast the volatility of time series data. While standard financial models often assume that the "spread" or variance of returns is constant over time, GARCH recognizes that volatility changes and often "clusters" together.
-
-#### Core Concepts
 
 To understand GARCH, it helps to break down the technical terms:
 
@@ -60,11 +58,49 @@ The primary strength of GARCH is its ability to capture volatility clustering—
 
 This project uses **GARCH(p,q)** models where p and q are parameters defined in the API.
 
+-->
+### High-Level Project Overview
 
+The project follows a modular, layered architecture with a clear separation of concerns across configuration, data access, domain modeling, numerical computation, schema validation, and presentation (HTTP API).
 
-## Project Structure
+```
+                                  ┌────────────────────────┐
+                                  │   HTTP Request (REST)  │
+                                  └───────────┬────────────┘
+                                              │
+                                              ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. Presentation & Routing Layer (`main.py`)                                            │
+│    • Centralized structured logging (`logging.basicConfig`)                            │
+│    • /diagnostics/check    • /model/search    • /models/fit    • /models/forecast      │
+└────────┬────────────────────────────┬───────────────────────────────┬──────────────────┘
+         │                            │                               │
+         ▼                            ▼                               ▼
+┌─────────────────────────┐  ┌─────────────────────────┐  ┌─────────────────────────┐
+│ 2. Schema Validation    │  │ 3. Domain Model Layer   │  │ 4. Mathematical Engine  │
+│    (`src/schemas.py`)   │  │    (`src/model.py`)     │  │    (`src/math_helper.py`)│
+│ • Pydantic V2 Models    │  │ • GarchModel lifecycle  │  │ • Student-t quantiles   │
+│ • Enums & Bounds        │  │ • arch_model calibration│  │ • Expected Shortfall(ES)│
+│ • Field/Model Validators│  │ • Artifact dump/load    │  │ • Volatility aggregation│
+│ • Ticker Sanitization   │  │ • Model Registry Search │  │ • Regime classification │
+└─────────────────────────┘  └────────────┬────────────┘  └─────────────────────────┘
+                                          │
+                                          ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ 5. Data Access & Ingestion Layer (`src/data.py`, `config.py`)                          │
+│    • TwelveDataAPI: External daily equity data retrieval via REST                      │
+│    • SQLRepository: Generic SQLite CRUD operations                                     │
+│    • Timezone-aware NYSE EOD schedule checks (America/New_York)                        │
+└────────────────────────┬────────────────────────────────┬──────────────────────────────┘
+                         │                                │
+                         ▼                                ▼
+         ┌───────────────────────────────┐ ┌───────────────────────────────┐
+         │ `market_data.sqlite`          │ │ `models.sqlite` & `models/`   │
+         │ (Cached historical OHLCV data)│ │ (Model registry & artifacts)  │
+         └───────────────────────────────┘ └───────────────────────────────┘
+```
 
-The project is separated into three layers: the main program, the data layer, and the model layer. The `/data` folder contains the SQLite files while the `/models` folder contains the saved GARCH models as `.pkl` files.
+### Layered Project Structure
 
 ```
 predicting-stock-volatility-using-Python/
@@ -107,46 +143,7 @@ predicting-stock-volatility-using-Python/
 ```
 
 
-## High-Level Project Overview
 
-The project follows a modular, layered architecture with a clear separation of concerns across configuration, data access, domain modeling, numerical computation, schema validation, and presentation (HTTP API).
-
-```
-                                  ┌────────────────────────┐
-                                  │   HTTP Request (REST)  │
-                                  └───────────┬────────────┘
-                                              │
-                                              ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. Presentation & Routing Layer (`main.py`)                                            │
-│    • Centralized structured logging (`logging.basicConfig`)                            │
-│    • /diagnostics/check    • /model/search    • /models/fit    • /models/forecast      │
-└────────┬────────────────────────────┬───────────────────────────────┬──────────────────┘
-         │                            │                               │
-         ▼                            ▼                               ▼
-┌─────────────────────────┐  ┌─────────────────────────┐  ┌─────────────────────────┐
-│ 2. Schema Validation    │  │ 3. Domain Model Layer   │  │ 4. Mathematical Engine  │
-│    (`src/schemas.py`)   │  │    (`src/model.py`)     │  │    (`src/math_helper.py`)│
-│ • Pydantic V2 Models    │  │ • GarchModel lifecycle  │  │ • Student-t quantiles   │
-│ • Enums & Bounds        │  │ • arch_model calibration│  │ • Expected Shortfall(ES)│
-│ • Field/Model Validators│  │ • Artifact dump/load    │  │ • Volatility aggregation│
-│ • Ticker Sanitization   │  │ • Model Registry Search │  │ • Regime classification │
-└─────────────────────────┘  └────────────┬────────────┘  └─────────────────────────┘
-                                          │
-                                          ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 5. Data Access & Ingestion Layer (`src/data.py`, `config.py`)                          │
-│    • TwelveDataAPI: External daily equity data retrieval via REST                      │
-│    • SQLRepository: Generic SQLite CRUD operations                                     │
-│    • Timezone-aware NYSE EOD schedule checks (America/New_York)                        │
-└────────────────────────┬────────────────────────────────┬──────────────────────────────┘
-                         │                                │
-                         ▼                                ▼
-         ┌───────────────────────────────┐ ┌───────────────────────────────┐
-         │ `market_data.sqlite`          │ │ `models.sqlite` & `models/`   │
-         │ (Cached historical OHLCV data)│ │ (Model registry & artifacts)  │
-         └───────────────────────────────┘ └───────────────────────────────┘
-```
 
 <!---
 
@@ -278,10 +275,27 @@ The primary purpose of the model layer (`model.py`) is to encapsulate the entire
 The `main.py` runs the application and uses FastAPI to deploy the model. It uses the previously mentioned object classes from `data.py` and `model.py`.
 
 --->
-## Installation & API Guide
+### Installation & Setup
 
 > Please see detailed instructions on how to run this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
 {: .prompt-info }
 
+### API Guide
+
+#### ``
+
+<!---
+## Challenges and Lessons
+- Data validation is important -> Pydantic schemas
+- Model and Field validation -> FastAPI
+
+--->
+## Limitations
+- Models assume zero-mean.
+- Only supports GARCH models.
+- Error distribution is only normal and student’s t distribution
+- Value-at-Risk calculation method is parametric only.
+
 ## Future Enhancements
 * Integrate a frontend dashboard using Streamlit or Dash.
+* Include support for other ARCH model types, error distribution, and value-at-risk calculation methods.
