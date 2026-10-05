@@ -7,7 +7,7 @@ tags: [api, finance, python, FastAPI, time series analysis]
 math: true
 ---
 
-In this project, I created a Python program that pulls historical stock prices data from Twelve Data API, stores it in a SQLite database, and trains a GARCH model to predict volatility. The program is deployed as a RESTful API via FastAPI.
+In this project, I created a Python program that pulls historical daily stock prices from the **Twelve Data API**, synchronizes records with a local **SQLite database cache (`market_data.sqlite`)**, fits an autoregressive conditional heteroskedasticity (**GARCH**) model via the `arch` library, records model metadata and performance metrics in a registry database (**`models.sqlite`**), and exposes high-performance statistical diagnostics and forecasting endpoints via **FastAPI**.
 
 
 > You can find the source code and documentation for this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
