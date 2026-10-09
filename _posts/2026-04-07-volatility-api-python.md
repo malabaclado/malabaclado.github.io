@@ -28,6 +28,14 @@ Technologies used:
 - Model: GARCH
 - Concepts: Time-series analysis, RESTful API design, CRUD operations.
 
+## Key Features
+- **Volatility Forecasting:** Fits GARCH(p, q) models to historical log returns to capture volatility clustering and generate multi-period variance forecasts.
+- **Tail-Risk Estimation:** Computes closed-form Value-at-Risk (VaR) and Expected Shortfall (ES) under Normal and Student's t-distributions with unit-variance quantile adjustments.
+- **Statistical Diagnostics:** Validates inputs using Augmented Dickey-Fuller (ADF) tests for stationarity and Engle's LM tests to verify ARCH effects prior to fitting.
+- **Model Registry & Search:** Persists model parameters, convergence state, persistence metrics, and information criteria (AIC/BIC) in SQLite, exposed via search and filter endpoints.
+- **Market-Aware Caching:** Aligns ingestion with New York exchange hours and validates date ranges locally to prevent stale data and eliminate redundant API calls.
+- **Dockerized Architecture:** Fully containerized service packaged with Docker for streamlined setup, isolated dependencies, and portable deployment.
+
 <!---
 
 In finance, **volatility** is a statistical measure of the dispersion of returns for a given security or market index. It represents the degree to which an asset's price fluctuates over time. Mathematically, it is most often expressed as the standard deviation ($\sigma$) of logarithmic returns, calculated as:
