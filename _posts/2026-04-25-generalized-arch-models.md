@@ -8,6 +8,8 @@ math: true
 
 **GARCH**, which stands for Generalized Autoregressive Conditional Heteroskedasticity, is a statistical model used to estimate and forecast the volatility of time series data. While standard financial models often assume that the "spread" or variance of returns is constant over time, GARCH recognizes that volatility changes and often "clusters" together.
 
+This is some change.
+
 ## Core Concepts
 
 To understand GARCH, it helps to break down the technical terms:
