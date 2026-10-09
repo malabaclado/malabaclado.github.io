@@ -1,5 +1,5 @@
 ---
-title: Automated Client Dashboard Ingestion & Workflow Monitoring Engine
+title: Automated CMS Dashboard Monitoring Tool
 ---
 {One paragraph hook into what I did}
 
