@@ -5,15 +5,31 @@ title: Automated CMS Dashboard Monitoring Tool
 
 # The Problem With Our Daily Monitoring
 
-*{Intro: How I come up with the idea; include operational friction - wasted time, cognitive fatigue, missed monitoring}*
+At my work, we have a daily monitoring of their CMS dashboard. The monitoring task is two-fold: we check if the import is fine, if not, we report this to our engineering. Then we check the content if there are stale or inactive instruments. 
 
-As a Lead Specialist at FactSet, part of our function is to execute different custom workflows for our customers. In one of our custome
+The monitoring involves the following steps:
+1. Logging in to the client's CMS portal
+2. Copy and pasting multiple content and importer health check status from the CMS dashboard to an Excel sheet that the team keeps as logs.
+3. Report failed or missing imports to engineering via mail.
+4. Check inactive or outdated instruments based on specific rules, open an internal ticket.
 
-**Core Tech Stack**
+This daily monitoring is rotated between 4 resources in the team, and takes around 15-30 minutes on a daily basis. The majority of this time is spent on the manual task of copying each health check  status, going back and forth between the CMS dashboard and the Excel file, not to mention, the tedious process of having to format the logs properly since it is being copied from a table format. For a monitoring and reporting workflow, the task is cognitively demanding simply because there are a lot of manual steps to be done. Many of our colleagues, honestly, me included, dread the time when we have to work on this monitoring. Since then, I have been thinking how to make this workflow simpler and faster.
 
 # How the tool solved the problem
 
 *{The spark: How my solution solved the problem}*
+
+Having a background in Python programming and having worked on previous automation projects, I took on the challenge of streamlining this workflow. To start, I outlined what steps are repetitive manual work and can be automated:
+1. Copy-pasting health check statuses from the CMS dashboard to Excel
+2. The decision logic of choosing what needs to be copied or logged (we skip a lot of items from the dashboard especially if "Healthy/No Error".)
+3. Identifying urgent error 
+4. Drafting an email to our engineers 
+
+**Core Tech Stack**
+- Python
+
+
+
 
 # How I built the tool
 
