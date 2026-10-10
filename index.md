@@ -7,7 +7,10 @@ layout: page
   <h2 class="h4 fw-bold mb-2">Hi, I'm Mark 👋</h2>
   <p class="text-muted mb-3">
     I'm a <strong>Lead Digital API Specialist at FactSet</strong> and a <strong>Mathematics graduate from UP Diliman</strong>. 
-    I bridge the gap between rigorous mathematical theory and practical, automated software solutions—building quantitative models, high-performance Python APIs, and scalable data workflows.
+    I bridge the gap between rigorous mathematical theory and practical, automated software solutions—building quantitative models, high-performance Python APIs, and scalable data workflows.<br><br>
+     
+     As a <strong>Lead Digital API Specialist</strong>, I acted as a subject matter expert for FactSet's Digital API products. During my first 18 months, I led an automation initiative using the <strong>Power Platform</strong> that overhauled internal queuing workflows—slashing ticket acknowledgment turnaround by <strong>50%</strong> and earning an early promotion.<br><br>
+	<strong>Current Direction:</strong> I am expanding further into <strong>Quantitative Development</strong> and <strong>Machine Learning Engineering</strong>. From my undergraduate research applying Support Vector Regression to equity markets, to building econometric REST APIs and earning credentials in Snowflake and Advanced Analytics, I build resilient systems that turn complex data into actionable operational signal.
   </p>
   <div class="d-flex flex-wrap gap-2 mb-3">
     <a href="mailto:malabaclado@gmail.com?subject=Resume%20Request" class="btn btn-outline-primary btn-sm rounded-pill">
@@ -122,7 +125,7 @@ layout: page
   </a>
 </div>
 
-<!-- Background & Focus -->
+<!-- Background & Focus 
 <h2 class="h5 fw-bold mb-3">Background &amp; Focus</h2>
 
 <div class="mb-4">
@@ -136,7 +139,7 @@ layout: page
     <strong>Current Direction:</strong> I am expanding further into <strong>Quantitative Development</strong> and <strong>Machine Learning Engineering</strong>. From my undergraduate research applying Support Vector Regression to equity markets, to building econometric REST APIs and earning credentials in Snowflake and Advanced Analytics, I build resilient systems that turn complex data into actionable operational signal.
   </p>
 </div>
-
+-->
 <!-- Certifications & Credentials -->
 <h2 class="h5 fw-bold mb-3">Certifications &amp; Credentials</h2>
 
