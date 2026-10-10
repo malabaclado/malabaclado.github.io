@@ -1,7 +1,7 @@
 ---
 layout: tags
 icon: fas fa-tags
-order: 3
+order: 4
 ---
 
 {% for tag in site.tags %}
