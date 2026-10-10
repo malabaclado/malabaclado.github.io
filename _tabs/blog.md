@@ -5,28 +5,28 @@ icon: fa-solid fa-pen-nib
 order: 2
 ---
 
-<div id="blog-list">
+<div id="blog-list" class="mb-3">
   {% for post in site.categories.Blog %}
-    <article class="border-bottom pb-4 mb-4">
-      <h2 class="h5 mt-0">
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      </h2>
-      <div class="post-meta text-muted d-flex flex-wrap align-items-center mb-2">
-        <span class="me-3">
-          <i class="far fa-calendar fa-fw"></i>
-          {{ post.date | date: "%b %d, %Y" }}
+    <article class="border rounded-2 p-3 mb-3" style="background: var(--card-bg, inherit);">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+        <h2 class="h6 mb-0 fw-semibold">
+          <a href="{{ post.url | relative_url }}" class="text-decoration-none">{{ post.title }}</a>
+        </h2>
+        <span class="small text-muted">
+          <i class="far fa-calendar fa-fw"></i> {{ post.date | date: "%b %d, %Y" }}
         </span>
-        {% if post.tags.size > 0 %}
-          <span class="d-inline-flex flex-wrap align-items-center">
-            <i class="fa fa-tags fa-fw me-1"></i>
-            {% for tag in post.tags %}
-              <span class="badge text-muted border me-1 mb-1">{{ tag }}</span>
-            {% endfor %}
-          </span>
-        {% endif %}
       </div>
-      <p class="small text-muted mb-2">{{ post.excerpt | strip_html | truncate: 220 }}</p>
-      <a href="{{ post.url | relative_url }}" class="small text-primary font-weight-bold text-decoration-none">Read Article &rarr;</a>
+      {% if post.tags.size > 0 %}
+        <div class="mb-2">
+          {% for tag in post.tags %}
+            <span class="badge border text-muted fw-normal me-1 mb-1">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <p class="small text-muted mb-2">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+      <div>
+        <a href="{{ post.url | relative_url }}" class="small text-primary text-decoration-none fw-semibold">Read Article &rarr;</a>
+      </div>
     </article>
   {% endfor %}
 </div>

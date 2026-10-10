@@ -2,7 +2,6 @@
 title: "Portfolio Review & Recruiter Recommendations"
 date: 2026-10-09
 ---
-
 # Portfolio Analysis & Recommendations for Recruiters
 
 ## 1. Executive Summary & Current Strengths

@@ -6,15 +6,13 @@ layout: page
 <div class="mb-4">
   <h2 class="h4 fw-bold mb-2">Hi, I'm Mark 👋</h2>
   <p class="text-muted mb-3">
-    I'm a <strong>Lead Digital API Specialist at FactSet</strong> and a <strong>Mathematics graduate from UP Diliman</strong>. 
-    I bridge the gap between rigorous mathematical theory and practical, automated software solutions—building quantitative models, high-performance Python APIs, and scalable data workflows.<br><br>
-
-     As a <strong>Lead Digital API Specialist</strong>, I acted as a subject matter expert for FactSet's Digital API products. During my first 18 months, I led an automation initiative using the <strong>Power Platform</strong> that overhauled internal queuing workflows—slashing ticket acknowledgment turnaround by <strong>50%</strong> and earning an early promotion.<br><br> 
-        <strong>Current Direction:</strong> I am expanding further into <strong>Quantitative Development</strong> and <strong>Machine Learning Engineering</strong>. From my undergraduate research applying Support Vector Regression to equity markets, to building econometric REST APIs and earning credentials in Snowflake and Advanced Analytics, I build resilient systems that turn complex data into actionable operational signal.
+    I'm a <strong>Mathematics graduate</strong> and an <strong>enterprise data professional</strong> with hands-on expertise in financial API architecture, econometric modeling, and workflow automation.<br><br>
+    As a <strong>Lead Digital API Specialist</strong>, I acted as a subject matter expert for FactSet's Digital API products. During my first 18 months, I led an automation initiative using the <strong>Power Platform</strong> that overhauled internal queuing workflows—slashing ticket acknowledgment turnaround by <strong>50%</strong> and earning an early promotion.<br><br>
+    <strong>Current Direction:</strong> I am expanding further into <strong>Quantitative Development</strong> and <strong>Machine Learning Engineering</strong>. From my undergraduate research applying Support Vector Regression to equity markets, to building econometric REST APIs and earning credentials in Snowflake and Advanced Analytics, I build resilient systems that turn complex data into actionable operational signal.
   </p>
   <div class="d-flex flex-wrap gap-2 mb-3">
-    <a href="mailto:malabaclado@gmail.com?subject=Resume%20Request" class="btn btn-outline-primary btn-sm rounded-pill">
-      <i class="fas fa-file-alt me-1"></i> Resume
+    <a href="{{ '/cv/' | relative_url }}" class="btn btn-outline-primary btn-sm rounded-pill">
+      <i class="fas fa-file-alt me-1"></i> CV
     </a>
     <a href="{{ '/projects/' | relative_url }}" class="btn btn-outline-primary btn-sm rounded-pill">
       <i class="fas fa-laptop-code me-1"></i> Projects
