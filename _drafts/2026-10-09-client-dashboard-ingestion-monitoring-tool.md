@@ -7,6 +7,8 @@ title: Automated CMS Dashboard Monitoring Tool
 
 *{Intro: How I come up with the idea; include operational friction - wasted time, cognitive fatigue, missed monitoring}*
 
+As a Lead Specialist at FactSet, part of our function is to execute different custom workflows for our customers. In one of our custome
+
 **Core Tech Stack**
 
 # How the tool solved the problem
