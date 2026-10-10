@@ -5,6 +5,8 @@ title: Automated CMS Dashboard Monitoring Tool
 
 # The Problem With Our Daily Monitoring
 
+*{Writing note: In this section, outline the problem and operational friction on the manual daily monitoring workflow on our team.}*
+
 At my work, we have a daily monitoring of their CMS dashboard. The monitoring task is two-fold: we check if the import is fine, if not, we report this to our engineering. Then we check the content if there are stale or inactive instruments. 
 
 The monitoring involves the following steps:
@@ -17,19 +19,15 @@ This daily monitoring is rotated between 4 resources in the team, and takes arou
 
 # How the tool solved the problem
 
-*{The spark: How my solution solved the problem}*
+*{Writing note: In this section, outline how the tool solves the problem discussed in the previous section.}*
 
 Having a background in Python programming and having worked on previous automation projects, I took on the challenge of streamlining this workflow. To start, I outlined what steps are repetitive manual work and can be automated:
 1. Copy-pasting health check statuses from the CMS dashboard to Excel
 2. The decision logic of choosing what needs to be copied or logged (we skip a lot of items from the dashboard especially if "Healthy/No Error".)
-3. Identifying urgent error 
-4. Drafting an email to our engineers 
+3. Identifying urgent error items from importer health check.
+4. Drafting an importer error report mail to our engineering colleagues. 
 
-**Core Tech Stack**
-- Python
-
-
-
+The result: A Python-based companion that can be executed on a single click (via shortcut!) and does the above tasks for me. 
 
 # How I built the tool
 
