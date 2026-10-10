@@ -48,9 +48,9 @@ order: 3
       <span class="badge border text-muted fw-normal">Manila, Philippines</span>
     </div>
     <ul class="small text-muted mb-0 ps-3 mt-2">
-      <li>Subject matter expert for FactSet Digital API client solutions and market data endpoints.</li>
-      <li>Led an enterprise automation initiative using the Power Platform, redesigning incident intake and slashing ticket acknowledgment turnaround by <strong>50%</strong>.</li>
-      <li>Conducted technical triage and API integration support for global financial institutional clients.</li>
+	  <li>2025 and 2026 Star Award Recipient</li>
+	  <li>Led an enterprise automation initiative using the Power Platform, redesigning incident intake and slashing ticket acknowledgment turnaround by <strong>50%</strong>.</li>
+      <li>Subject matter expert for FactSet Digital API client solutions and market data endpoints. Conducted technical triage and API integration support for global financial institutional clients.</li>
     </ul>
   </div>
 </div>
