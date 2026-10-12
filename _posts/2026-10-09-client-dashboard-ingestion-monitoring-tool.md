@@ -20,8 +20,6 @@ Every morning, someone on my team spent up to half an hour copying health check 
 {: .prompt-info }
 
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
-
 # The Problem With Our Daily Monitoring
 
 My team runs a daily monitoring routine on a client's CMS dashboard. The task has two parts. First, we check that the data importers ran correctly, and if they didn't, we report the failures to engineering. Second, we check the content itself for stale or inactive instruments.

@@ -2,6 +2,7 @@
 layout: post
 title: "Financial Econometrics API: Volatility and Value-at-Risk Forecasting with Python"
 date: 2026-04-06 10:00:00 -0500
+media_subpath: /assets/img/posts/2026-04-07-volatility-api-python/
 categories:
   - Projects
 tags:
