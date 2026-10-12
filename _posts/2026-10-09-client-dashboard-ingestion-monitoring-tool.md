@@ -6,6 +6,19 @@ categories:
 ---
 Every morning, someone on my team spent up to half an hour copying health check results from a web dashboard into an Excel sheet. I replaced that routine with a Python tool that fetches the data, filters out the noise, logs the results, and drafts the error report for engineering, all from a single click. The daily task now takes 5 to 10 minutes, and the team has adopted it in production.
 
+
+> **Disclaimer**
+> This is a portfolio copy of a tool built for real work, and it has been anonymized.
+> - **Client details are removed or replaced.** The customer name, dashboard URL, email addresses and engineer names are placeholders (`Client`, `www.placeholder-url.com`, `example.com` addresses, fictional names).
+> - **The sample data is a snapshot.** The files in `mock_input/` were derived from real health check responses. The customer name was removed from the file names and the connection details, but the fund and asset names, vendor names and statuses inside them are kept so the parsers have realistic input. These are public market data, and some fund names include the name of a well-known bank.
+> - **It runs as a mock, for demo purposes only.** By default the tool does **not** call any live service. It reads the sample responses from `mock_input/` and shows the same workflow end to end. The placeholder URL is not a real endpoint, so the live code path will fail if you switch demo mode off.
+> - **Nothing is monitored.** The results you see are the same sample data on every run.
+>{: .prompt-info }
+
+
+> You can find the source code and documentation for this project on [GitHub](https://github.com/malabaclado/predicting-stock-volatility-using-Python). 
+{: .prompt-info }
+
 # The Problem With Our Daily Monitoring
 
 My team runs a daily monitoring routine on a client's CMS dashboard. The task has two parts. First, we check that the data importers ran correctly, and if they didn't, we report the failures to engineering. Second, we check the content itself for stale or inactive instruments.
