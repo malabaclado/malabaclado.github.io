@@ -1,6 +1,7 @@
 ---
 title: Automated CMS Dashboard Monitoring Tool
 layout: post
+date: 2026-09-30 10:00:00 -0500
 media_subpath: /assets/img/posts/2026-10-09-automated-cms-dashboard-monitoring/
 categories:
   - Projects
@@ -60,7 +61,7 @@ The tool does the legwork, and the human still decides what gets sent.
 The dashboard has no public API or export feature, so the first question was where its data comes from. A web page that shows a table has to get that table from somewhere. By inspecting the Network tab (filtered to Fetch/XHR) in the browser's developer tools while the dashboard loaded, I found that the page fills itself from two JSON endpoints, one for the content check and one for the importer check (for example, `/healthcheck/content/`). The same inspection gave me the request headers the browser sends along with each call.
 
 ![Inspecting the health check request URLs from the client's CMS Dashboard (anonymized)](discovering-dashboard-api-calls.png)
-_This is what
+_This is what the client's CMS Dashboard (right) looks like and how I inspect the  source endpoints (left)_
 
 That meant I could skip the page entirely. Instead of scraping rendered HTML, the tool sends the same requests the browser sends the client's servers and receives the raw health check data directly. This is faster and more stable than scraping, because it doesn't depend on how the page looks like.
 
@@ -75,62 +76,15 @@ Calling the endpoints directly created a new problem: *authentication*. Normally
 I took a more practical route. When the tool detects that its saved cookies are older than six hours, it asks the user to copy any dashboard request from the browser's developer tools using "Copy as cURL" and paste it into the terminal. 
 
 ![Detailed descriptive alt text](copying-browser-cookies.png){: w="400" }
+_Three-click process for copying the session cookies, along with other request parameters used by the API call_
 
 The tool parses the pasted text with regular expressions, extracts the session ID, CSRF token and user analysis values, and saves them for the next six hours. The same pasted request also provides the headers, so every call looks like it came from a normal browser session.
 
 ![Detailed descriptive alt text](cli-check-cookies.png)
+_Refresh cookie instructions native on the tool_
 
 This keeps the user in control of the login and still removes most of the friction. Refreshing the cookies takes seconds, and once it is done, later runs within the window skip that step completely.
 
-
-
-
-```python
-def update_cookies(cookies: dict):
-    """Interactively refresh stale cookies from a pasted browser cURL command.
-    Expects the user to paste a "Copy as cURL (cmd)" request from DevTools
-    (see dialogues['refresh_cookies_instruction'] for the exact steps) and
-    reads it line-by-line from stdin until a blank 'END' line, extracting the
-    CSRF token, session ID, and user analysis values via regex.
-    """
-    print('Cookies are stale. Please update to ensure the program works correctly.')
-    print(dialogues['refresh_cookies_instruction'])
-    cookies_updated = False
-    print("Enter your text (Press 'ENTER' to finish input):")
-    for line in iter(input, ""):
-        if '^"X-CSRFToken:' in line:
-            x_csrf_token = extract_regex(r'X-CSRFToken: (.+?)\^"', line)
-            modify_cookies(cookies=cookies, key="X_CSRF_TOKEN", value=x_csrf_token)
-            # update_env("X_CSRF_TOKEN", x_csrf_token)
-            # print('X-CSRFTOKEN=' + x_csrf_token)
-        elif '^"USER_ANALYSIS' in line:
-            print('Started')
-            sessionid = extract_regex(r'PHPSESSID=(.+?)\^"',line)
-            modify_cookies(cookies=cookies, key="PHPSESSID", value=sessionid)
-            # update_env("PHPSESSID", sessionid)
-            # print('SESSIONID=' + sessionid)
-            csrf_token = extract_regex(r'CSRF_TOKEN=(.+?);',line)
-            modify_cookies(cookies=cookies, key="CSRF_TOKEN", value=csrf_token)
-            # update_env("CSRF_TOKEN", csrf_token)
-            # print('CSRFTOKEN=' + csrf_token)
-            user_analysis = extract_regex(r'USER_ANALYSIS=(.+?);',line)
-            modify_cookies(cookies=cookies, key="USER_ANALYSIS", value=user_analysis)
-            # update_env("USER_ANALYSIS", user_analysis)
-            # print('USER_ANALYSIS=' + user_analysis)
-            # cookies_updated = TRUE only if Cookie line detected and above code ran
-            now = datetime.now()
-            modify_cookies(cookies, key='LAST_UPDATED', value = datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-            cookies_updated = True
-        elif line == '':
-            continue
-        elif line == 'END':
-            break
-    if cookies_updated == True:
-        print('BROWSER COOKIES UPDATED!')
-    else:
-        print('BROWSER COOKIES UPDATE FAILED.')
-
-```
 ### Filtering Through the Noise
 
 Getting the data was only half the job. The raw responses are deeply nested trees of asset classes, importers and checks, and the details are embedded as HTML fragments inside the JSON. Most of what they contain is healthy status that nobody needs to read.
@@ -162,8 +116,10 @@ The final piece was connecting the tool's output to the rest of the routine, so 
 - **Adoption.** I wrote a usage guide so that all four people on the rotation could pick up the tool without needing me.
 
 ![Detailed descriptive alt text](power-automate-flow.png){: w="300" }
+_Power automate flow that picks up the CSV files and saves them to a cloud folder._
 
 ![Detailed descriptive alt text](excel-logs.png)
+_This is what our review logs looks like, with proper table formatting and slicers for fast recall._
 
 ## Impact
 
