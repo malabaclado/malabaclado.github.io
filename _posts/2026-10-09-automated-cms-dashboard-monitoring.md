@@ -59,23 +59,30 @@ The tool does the legwork, and the human still decides what gets sent.
 
 The dashboard has no public API or export feature, so the first question was where its data comes from. A web page that shows a table has to get that table from somewhere. By inspecting the Network tab (filtered to Fetch/XHR) in the browser's developer tools while the dashboard loaded, I found that the page fills itself from two JSON endpoints, one for the content check and one for the importer check (for example, `/healthcheck/content/`). The same inspection gave me the request headers the browser sends along with each call.
 
-![Detailed descriptive alt text](discovering-dashboard-api-calls.png)
+![Inspecting the health check request URLs from the client's CMS Dashboard (anonymized)](discovering-dashboard-api-calls.png)
+_This is what
 
 That meant I could skip the page entirely. Instead of scraping rendered HTML, the tool sends the same requests the browser sends the client's servers and receives the raw health check data directly. This is faster and more stable than scraping, because it doesn't depend on how the page looks like.
 
 ### The Cookie Problem
 
-Calling the endpoints directly created a new problem: *authentication*. The dashboard identifies a logged-in user through *session cookies* and a *CSRF token*, and these expire after a few hours. A script that can't log in is useless, but I deliberately chose not to automate the login itself, for three reasons:
+Calling the endpoints directly created a new problem: *authentication*. Normally, we log in to the CMS with a user and password but an internal API does not directly use these credentials. The dashboard identifies a logged-in user through *session cookies* and a *CSRF token*, and these expire after a few hours. A script that can't log in is useless, but I deliberately chose not to automate the login itself, for three reasons:
 
 1. **Lockout risk.** Repeated automated sign-ins during testing could lock the monitoring account.
 2. **Unwanted attention.** Scripted logins would draw unnecessary attention to the monitoring account.
 3. **Security.** Our enterprise machines have strict security in place. Browser-based automation would have added complexity and a possible security risk that I didn't want to introduce.
 
-I took a more practical route. When the tool detects that its saved cookies are older than six hours, it asks the user to copy any dashboard request from the browser's developer tools using "Copy as cURL" and paste it into the terminal. The tool parses the pasted text with regular expressions, extracts the session ID, CSRF token and user analysis values, and saves them for the next six hours. The same pasted request also provides the headers, so every call looks like it came from a normal browser session.
+I took a more practical route. When the tool detects that its saved cookies are older than six hours, it asks the user to copy any dashboard request from the browser's developer tools using "Copy as cURL" and paste it into the terminal. 
+
+![Detailed descriptive alt text](copying-browser-cookies.png){: w="400" }
+
+The tool parses the pasted text with regular expressions, extracts the session ID, CSRF token and user analysis values, and saves them for the next six hours. The same pasted request also provides the headers, so every call looks like it came from a normal browser session.
+
+![Detailed descriptive alt text](cli-check-cookies.png)
 
 This keeps the user in control of the login and still removes most of the friction. Refreshing the cookies takes seconds, and once it is done, later runs within the window skip that step completely.
 
-![[Pasted image 20261012153851.png]]
+
 
 
 ```python
@@ -144,6 +151,8 @@ A script that works on my machine is not the same as a tool the team can rely on
 - **A better user experience with Rich.** The terminal output uses panels, spinners and a final execution summary, so the user always knows which step is running and what happened.
 - **CLI parameters for auto mode.** An `--auto` flag takes the default answer at every prompt, so the tool can run unattended once the cookies are fresh.
 
+![Detailed descriptive alt text](cli-start.png)
+
 ### Streamlining the Workflow
 
 The final piece was connecting the tool's output to the rest of the routine, so that nothing is left to copy by hand:
@@ -152,9 +161,9 @@ The final piece was connecting the tool's output to the rest of the routine, so 
 - **Reporting to engineers.** The importer errors are compiled into an HTML table and opened as an Outlook draft addressed to the engineers. I chose a draft over automatic sending on purpose: a human reviews it first, which keeps accountability with the person on duty.
 - **Adoption.** I wrote a usage guide so that all four people on the rotation could pick up the tool without needing me.
 
-## Power Automate Flow
+![Detailed descriptive alt text](power-automate-flow.png){: w="300" }
 
-![[Pasted image 20261012161347.png]]
+![Detailed descriptive alt text](excel-logs.png)
 
 ## Impact
 
@@ -162,11 +171,9 @@ The final piece was connecting the tool's output to the rest of the routine, so 
 - A 20-minute routine now takes 5 to 10 minutes, saving roughly 50% of the time and a good share of the mental effort.
 - The team's daily log now builds itself. The CSV reports land in SharePoint through Power Automate, and Power Query combines them into a single table in the review sheet, so no one has to paste or reformat anything.
 
-![[Pasted image 20261012161736.png]]
-
 ## Limitations and Future Work
 
-- **The tool depends on an undocumented API.** Vendor APIs don't stay static forever. Today the tool relies on defensive error handling. As a next step, I plan to add strict schema validation so the pipeline fails loudly and clearly if the contract changes, instead of silently producing wrong reports.
+- **The tool depends on an undocumented API.** The client's CMS API don't stay static forever. Today the tool relies on defensive error handling. As a next step, I plan to add strict schema validation so the pipeline fails loudly and clearly if the contract changes, instead of silently producing wrong reports.
 - **Cookie refresh is still manual.** The paste step takes seconds, but it is the one part of the routine that needs a person every few hours. Automating it would require handling credentials, which I would only do with the client's and security team's approval.
 - **The tool is tied to Windows and Outlook.** The email steps use Outlook through COM. Moving to a different mail system would need a small rewrite of those functions.
 - **The filtering rules are hardcoded.** Excluded checks and asset classes live in the code. Moving them into a configuration file would let the team adjust them without editing Python.
