@@ -1,10 +1,14 @@
 ---
 title: Automated CMS Dashboard Monitoring Tool
 layout: post
+media_subpath: /assets/img/posts/2026-10-09-automated-cms-dashboard-monitoring/
 categories:
   - Projects
 ---
-Every morning, someone on my team spent up to half an hour copying health check results from a web dashboard into an Excel sheet. I replaced that routine with a Python tool that fetches the data, filters out the noise, logs the results, and drafts the error report for engineering, all from a single click. The daily task now takes 5 to 10 minutes, and the team has adopted it in production.
+
+In this project, I will show you how I tackled a real operational gap at my workplace by automating a manually repetitive and time-consuming workflow. 
+
+Every morning, someone from our team spent up to half an hour copying health check results from a web dashboard into an Excel sheet. I replaced that routine with a Python tool that fetches the data, filters out the noise, logs the results, and drafts the error report for engineering, all from a single click. The daily task now takes 5 to 10 minutes, and the team has adopted it in production.
 
 
 > **Disclaimer**
